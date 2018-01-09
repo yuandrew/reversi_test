@@ -16,8 +16,8 @@ def main():
     args = parse_arguments()
     begin_state = json.load(args.infile)
 
-    import pdb
-    pdb.set_trace()
+    #import pdb
+    #pdb.set_trace()
 
 
 
@@ -36,54 +36,139 @@ def main():
     #parse rest of board to see effect of move
 
     #below
-    convert = 0
     for i in range(row + 1, 8):
         if begin_state[u'board'][i * 8 + column] == player:
-            convert = 1
+            #change pieces if needed
+            for j in range(row + 1, 8):
+                if begin_state[u'board'][j * 8 + column] == player:
+                    break
+                if begin_state[u'board'][j * 8 + column] != 0:
+                    begin_state[u'board'][j * 8 + column] = player
+                else:
+                    break
             break
-    #change pieces if needed
-    if convert == 1:
-        for i in range(row + 1, 8):
-            if begin_state[u'board'][i * 8 + column] == player:
-                break
-            begin_state[u'board'][i * 8 + column] = player
+
     #above
-    convert = 0
-    for i in range(row - 1, 0, -1):
+    for i in range(row - 1, -1, -1):
         if begin_state[u'board'][i * 8 + column] == player:
-            convert = 1
-            break
             # change pieces if needed
-    if convert == 1:
-        for i in range(row - 1, 0, -1):
-            if begin_state[u'board'][i * 8 + column] == player:
-                break
-            begin_state[u'board'][i * 8 + column] = player
+            for j in range(row - 1, -1, -1):
+                if begin_state[u'board'][j * 8 + column] == player:
+                    break
+                if begin_state[u'board'][j * 8 + column] != 0:
+                    begin_state[u'board'][j * 8 + column] = player
+                else:
+                    break
+            break
     #right
-    convert = 0
     for i in range(column + 1, 8):
         if begin_state[u'board'][row * 8 + i] == player:
-            convert = 1
+            #change pieces if needed
+            for j in range(column + 1, 8):
+                if begin_state[u'board'][row * 8 + j] == player:
+                    break
+                if begin_state[u'board'][row * 8 + j] != 0:
+                    begin_state[u'board'][row * 8 + j] = player
+                else:
+                    break
             break
-    #change pieces if needed
-    if convert == 1:
-        for i in range(column + 1, 8):
-            if begin_state[u'board'][row * 8 + i] == player:
-                break
-            begin_state[u'board'][row * 8 + i] = player
-    #left
-    convert = 0
-    for i in range(column - 1, 0, -1):
-        if begin_state[u'board'][row * 8 + i] == player:
-            convert = 1
-            break
-    #change pieces if needed
-    if convert == 1:
-        for i in range(column - 1, 0, -1):
-            if begin_state[u'board'][row * 8 + i] == player:
-                break
-            begin_state[u'board'][row * 8 + i] = player
 
+    #left
+    for i in range(column - 1, -1, -1):
+        if begin_state[u'board'][row * 8 + i] == player:
+            #change pieces if needed
+            for j in range(column - 1, -1, -1):
+                if begin_state[u'board'][row * 8 + j] == player:
+                    break
+                if begin_state[u'board'][row * 8 + j] != 0:
+                    begin_state[u'board'][row * 8 + j] = player
+                else:
+                    break
+            break
+
+    #diagonals
+
+
+    #downright diagonal
+    temp_col = column + 1
+    temp_row = row + 1
+    while temp_col < 8 and temp_row < 8:
+        if begin_state[u'board'][temp_row * 8 + temp_col] == player:
+            #change pieces if needed
+            temp_col = column + 1
+            temp_row = row + 1
+            while temp_col < 8 and temp_row < 8:
+                if begin_state[u'board'][temp_row * 8 + temp_col] == player:
+                    break
+                if begin_state[u'board'][temp_row * 8 + temp_col] != 0:
+                    begin_state[u'board'][temp_row * 8 + temp_col] = player
+                else:
+                    break
+                temp_col += 1
+                temp_row += 1
+            break
+        temp_col += 1
+        temp_row += 1
+    #downleft diagonal
+    temp_col = column - 1
+    temp_row = row + 1
+    while temp_col >= 0 and temp_row < 8:
+        if begin_state[u'board'][temp_row * 8 + temp_col] == player:
+            #change pieces if needed
+            temp_col = column - 1
+            temp_row = row + 1
+            while temp_col >= 0 and temp_row < 8:
+                if begin_state[u'board'][temp_row * 8 + temp_col] == player:
+                    break
+                if begin_state[u'board'][temp_row * 8 + temp_col] != 0:
+                    begin_state[u'board'][temp_row * 8 + temp_col] = player
+                else:
+                    break
+                temp_col -= 1
+                temp_row += 1
+            break
+        temp_col -= 1
+        temp_row += 1
+    #upleft diagonal
+    temp_col = column - 1
+    temp_row = row - 1
+    while temp_col >= 0 and temp_row >= 0:
+        if begin_state[u'board'][temp_row * 8 + temp_col] == player:
+            #change pieces if needed
+            temp_col = column - 1
+            temp_row = row - 1
+            while temp_col >= 0 and temp_row >= 0:
+                if begin_state[u'board'][temp_row * 8 + temp_col] == player:
+                    break
+                if begin_state[u'board'][temp_row * 8 + temp_col] != 0:
+                    begin_state[u'board'][temp_row * 8 + temp_col] = player
+                else:
+                    break
+                temp_col -= 1
+                temp_row -= 1
+            break
+        temp_col -= 1
+        temp_row -= 1
+    #upright diagonal
+    temp_col = column + 1
+    temp_row = row - 1
+    while temp_col < 8 and temp_row >= 0:
+        if begin_state[u'board'][temp_row * 8 + temp_col] == player:
+            #change pieces if needed
+            temp_col = column + 1
+            temp_row = row - 1
+            while temp_col < 8 and temp_row >= 0:
+                if begin_state[u'board'][temp_row * 8 + temp_col] == player:
+                    break
+                if begin_state[u'board'][temp_row * 8 + temp_col] != 0:
+                    begin_state[u'board'][temp_row * 8 + temp_col] = player
+                else:
+                    break
+                temp_col += 1
+                temp_row -= 1
+            break
+        temp_col += 1
+        temp_row -= 1
 
 
     end_state = {}
